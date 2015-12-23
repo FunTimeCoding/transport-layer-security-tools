@@ -2,24 +2,11 @@ organization = "Shiin Organization"
 unit = "Software Development"
 state = "Baden-Wuerttemberg"
 country = DE
-cn = "Alexander Reitzel"
-uid = "shiin"
-
-# Certificate serial number. Increment each time a new certificate is generated.
+cn = "Shiin Organization Certificate Authority"
 serial = 001
-
 expiration_days = 365
-
-# DNS name(s) of the server.
-dns_name = "web.shiin.org"
-dns_name = "dragon.shiin.org"
-
-# Optional server IP address.
-#ip_address = "192.168.1.1"
-
-# This certificate will be used for a TLS server.
+uid = "shiin"
+dns_name = "shiin.org"
+ip_address = "148.251.3.234"
 tls_www_server
-
-# This certificate will be used to encrypt data. Needed in TLS RSA cipher-suites.
-# Its preferred to use different keys for encryption and signing.
 encryption_key

@@ -2,18 +2,9 @@ organization = "Shiin Organization"
 unit = "Software Development"
 state = "Baden-Wuerttemberg"
 country = DE
-cn = "Shiin Organization CA"
-
-# Certificate serial number. Increment each time a new certificate is generated.
+cn = "Shiin Organization Certificate Authority"
 serial = 001
-
 expiration_days = 365
-
-# This is a CA certificate.
 ca
-
-# This key will be used to sign other certificates.
 cert_signing_key
-
-# This key will be used to sign CRLs.
 crl_signing_key
