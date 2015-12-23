@@ -21,10 +21,12 @@ else
     CERTTOOL="certtool"
 fi
 
+TEMPLATE="../template/signing_template"
 AUTHORITY_PRIVATE_KEY="${FULLY_QUALIFIED_DOMAIN_NAME}.authority-private-key.pem"
-${CERTTOOL} --generate-privkey --outfile ${AUTHORITY_PRIVATE_KEY}
-
 AUTHORITY_CERTIFICATE="${FULLY_QUALIFIED_DOMAIN_NAME}.authority-certificate.pem"
-${CERTTOOL} --generate-self-signed --template encryption_template --load-privkey ${AUTHORITY_PRIVATE_KEY} --outfile ${AUTHORITY_CERTIFICATE}
 
-chmod 600 ${AUTHORITY_CERTIFICATE}
+cd private
+${CERTTOOL} --generate-privkey --outfile "${AUTHORITY_PRIVATE_KEY}"
+${CERTTOOL} --generate-self-signed --template "${TEMPLATE}" --load-privkey "${AUTHORITY_PRIVATE_KEY}" --outfile "${AUTHORITY_CERTIFICATE}"
+
+chmod 600 "${AUTHORITY_CERTIFICATE}"

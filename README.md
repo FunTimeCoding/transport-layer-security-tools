@@ -2,28 +2,28 @@
 
 ## Usage
 
-First, generate a master key and certificate and keep them very private. This is also called level 1 certificate.
+First, generate a master key and certificate. Keep them very private. This is called a level 1 certificate. 
 
 ```sh
-./generate-authority-key.sh example.org
+./bin/generate-authority-certificate.sh example.org
 ```
 
-Then generate a signing key to be able to securely generate any amount of encryption keys. This is also called level 2 certificate.
+Then generate a signing key and certificate to be able to securely generate any amount of encryption keys and certificates. This is called a level 2 certificate.
 
 ```sh
-./generate-signing-key.sh example.org
+./bin/generate-signing-certificate.sh example.org
 ```
 
-Lastly, you can generate as many arbitrary encryption certificates as you want. They are then called level 3 certificates.
+Lastly, you can generate as many arbitrary encryption keys and certificates as you want. They are called level 3 certificates.
 
 ```sh
-./generate-arbitrary-key.sh example.org
+./bin/generate-arbitrary-certificate.sh example.org
 ```
 
 Print and validate all generated certificates.
 
 ```sh
-./validate-certificate.sh example.org.authority-certificate.pem
-./validate-certificate.sh example.org.singing-certificate.pem
-./validate-certificate.sh example.org.arbitrary-certificate.pem
+./bin/validate-certificate.sh private/example.org.authority-certificate.pem
+./bin/validate-certificate.sh private/example.org.singing-certificate.pem
+./bin/validate-certificate.sh private/example.org.arbitrary-certificate.pem
 ```
