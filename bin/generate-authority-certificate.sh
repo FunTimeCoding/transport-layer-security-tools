@@ -32,6 +32,16 @@ ca
 cert_signing_key
 crl_signing_key" > ${TEMPLATE}
 
-${CERTTOOL} --generate-privkey --outfile "${AUTHORITY_PRIVATE_KEY}"
-${CERTTOOL} --generate-self-signed --template "${TEMPLATE}" --load-privkey "${AUTHORITY_PRIVATE_KEY}" --outfile "${AUTHORITY_CERTIFICATE}"
+if [ -f "${AUTHORITY_PRIVATE_KEY}" ]; then
+    echo "Key exists: ${AUTHORITY_PRIVATE_KEY}"
+else
+    ${CERTTOOL} --generate-privkey --outfile "${AUTHORITY_PRIVATE_KEY}"
+fi
+
+if [ -f "${AUTHORITY_CERTIFICATE}" ]; then
+    echo "Certificate exists: ${AUTHORITY_CERTIFICATE}"
+else
+    ${CERTTOOL} --generate-self-signed --template "${TEMPLATE}" --load-privkey "${AUTHORITY_PRIVATE_KEY}" --outfile "${AUTHORITY_CERTIFICATE}"
+fi
+
 rm "${TEMPLATE}"

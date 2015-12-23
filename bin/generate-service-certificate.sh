@@ -46,8 +46,23 @@ ip_address = \"${ADDRESS}\"
 tls_www_server
 encryption_key" > ${TEMPLATE}
 
-${CERTTOOL} --generate-privkey --outfile "${SERVICE_PRIVATE_KEY}"
-${CERTTOOL} --generate-request --template "${TEMPLATE}" --load-privkey "${SERVICE_PRIVATE_KEY}" --outfile "${SERVICE_REQUEST_FILE}"
-${CERTTOOL} --generate-certificate --load-request "${SERVICE_REQUEST_FILE}" --load-ca-certificate "${SIGNING_CERTIFICATE}" --load-ca-privkey "${SIGNING_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${SERVICE_CERTIFICATE}"
+if [ -f "${SERVICE_PRIVATE_KEY}" ]; then
+    echo "Key exists: ${SERVICE_PRIVATE_KEY}"
+else
+    ${CERTTOOL} --generate-privkey --outfile "${SERVICE_PRIVATE_KEY}"
+fi
+
+if [ -f "${SERVICE_REQUEST_FILE}" ]; then
+    echo "CSR exists: ${SERVICE_REQUEST_FILE}"
+else
+    ${CERTTOOL} --generate-request --template "${TEMPLATE}" --load-privkey "${SERVICE_PRIVATE_KEY}" --outfile "${SERVICE_REQUEST_FILE}"
+fi
+
+if [ -f "${SERVICE_CERTIFICATE}" ]; then
+    echo "Certificate exists: ${SERVICE_CERTIFICATE}"
+else
+    ${CERTTOOL} --generate-certificate --load-request "${SERVICE_REQUEST_FILE}" --load-ca-certificate "${SIGNING_CERTIFICATE}" --load-ca-privkey "${SIGNING_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${SERVICE_CERTIFICATE}"
+fi
+
 rm "${SERVICE_REQUEST_FILE}"
 rm "${TEMPLATE}"
