@@ -1,13 +1,14 @@
 #!/bin/sh -e
 
 DIRECTORY=$(dirname "${0}")
-SCRIPT_DIRECTORY=$(cd "${DIRECTORY}"; pwd)
+SCRIPT_DIRECTORY=$(cd "${DIRECTORY}" || exit 1; pwd)
 
 usage()
 {
     echo "Local usage: ${0} SERVICE_NAME"
 }
 
+# shellcheck source=/dev/null
 . "${SCRIPT_DIRECTORY}/../lib/transport-layer-security.sh"
 
 SERVICE_NAME="${1}"
@@ -44,7 +45,7 @@ uid = \"${USER_NAME}\"
 dns_name = \"${FULLY_QUALIFIED_DOMAIN_NAME}\"
 ip_address = \"${ADDRESS}\"
 tls_www_server
-encryption_key" > ${TEMPLATE}
+encryption_key" > "${TEMPLATE}"
 
 if [ -f "${SERVICE_PRIVATE_KEY}" ]; then
     echo "Key exists: ${SERVICE_PRIVATE_KEY}"

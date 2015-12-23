@@ -1,13 +1,14 @@
 #!/bin/sh -e
 
 DIRECTORY=$(dirname "${0}")
-SCRIPT_DIRECTORY=$(cd "${DIRECTORY}"; pwd)
+SCRIPT_DIRECTORY=$(cd "${DIRECTORY}" || exit 1; pwd)
 
 usage()
 {
     echo "Local usage: ${0}"
 }
 
+# shellcheck source=/dev/null
 . "${SCRIPT_DIRECTORY}/../lib/transport-layer-security.sh"
 
 # TODO: Make these values dynamic.
@@ -30,7 +31,7 @@ serial = ${SERIAL}
 expiration_days = 365
 ca
 cert_signing_key
-crl_signing_key" > ${TEMPLATE}
+crl_signing_key" > "${TEMPLATE}"
 
 if [ -f "${AUTHORITY_PRIVATE_KEY}" ]; then
     echo "Key exists: ${AUTHORITY_PRIVATE_KEY}"

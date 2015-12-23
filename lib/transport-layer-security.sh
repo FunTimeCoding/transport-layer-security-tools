@@ -1,6 +1,5 @@
 #!/bin/sh -e
 
-SCRIPT_DIR=$(cd "$(dirname "${0}")"; pwd)
 CONFIG=""
 VERBOSE=false
 
@@ -73,6 +72,7 @@ find_config()
 
 find_config
 
+# shellcheck source=/dev/null
 . "${CONFIG}"
 
 validate_config()
