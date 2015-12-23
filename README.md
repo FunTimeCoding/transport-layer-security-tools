@@ -24,6 +24,6 @@ Print and validate all generated certificates.
 
 ```sh
 ./bin/validate-certificate.sh private/example.org.authority-certificate.pem
-./bin/validate-certificate.sh private/example.org.singing-certificate.pem
+./bin/validate-certificate.sh private/example.org.signing-certificate.pem
 ./bin/validate-certificate.sh private/example.org.arbitrary-certificate.pem
 ```
