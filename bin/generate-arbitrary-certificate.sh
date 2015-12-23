@@ -32,5 +32,3 @@ cd private
 ${CERTTOOL} --generate-privkey --outfile "${ARBITRARY_PRIVATE_KEY}"
 ${CERTTOOL} --generate-request --template "${TEMPLATE}" --load-privkey "${ARBITRARY_PRIVATE_KEY}" --outfile "${REQUEST_FILE}"
 ${CERTTOOL} --generate-certificate --load-request "${REQUEST_FILE}" --load-ca-certificate "${SIGNING_CERTIFICATE}" --load-ca-privkey "${SIGNING_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${ARBITRARY_CERTIFICATE}"
-
-chmod 600 "${ARBITRARY_CERTIFICATE}"

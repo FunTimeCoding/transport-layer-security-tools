@@ -28,5 +28,3 @@ AUTHORITY_CERTIFICATE="${FULLY_QUALIFIED_DOMAIN_NAME}.authority-certificate.pem"
 cd private
 ${CERTTOOL} --generate-privkey --outfile "${AUTHORITY_PRIVATE_KEY}"
 ${CERTTOOL} --generate-self-signed --template "${TEMPLATE}" --load-privkey "${AUTHORITY_PRIVATE_KEY}" --outfile "${AUTHORITY_CERTIFICATE}"
-
-chmod 600 "${AUTHORITY_CERTIFICATE}"
