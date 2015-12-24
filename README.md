@@ -23,7 +23,7 @@ Lastly, you can generate as many service encryption keys and certificates as you
 Print and validate all generated certificates.
 
 ```sh
-./bin/validate-certificate.sh private/example.org.authority-certificate.pem
-./bin/validate-certificate.sh private/example.org.signing-certificate.pem
-./bin/validate-certificate.sh private/ldap.example.org.service-certificate.pem
+./bin/validate-certificate.sh private/example.org.authority-certificate.crt
+./bin/validate-certificate.sh private/example.org.signing-certificate.crt
+./bin/validate-certificate.sh private/ldap.example.org.service-certificate.crt
 ```
