@@ -20,7 +20,8 @@ if [ "${NODE_NAME}" = "" ]; then
     exit 1
 fi
 
-SERIAL_FILE="${NODE_NAME}_node_certificate_serial"
+cd "private" || (echo "Directory 'private' not found." && exit 1)
+SERIAL_FILE="node_certificate_serial"
 
 if [ ! -f "${SERIAL_FILE}" ]; then
     echo "001" > "${SERIAL_FILE}"
@@ -30,7 +31,6 @@ SERIAL=$(cat "${SERIAL_FILE}")
 COMMON_NAME="${NODE_NAME}.${FULLY_QUALIFIED_DOMAIN_NAME}"
 ADDRESS=$(arp -n "${FULLY_QUALIFIED_DOMAIN_NAME}" | sed "s/.*(\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\)).*/\1/g")
 USER_NAME=$(whoami)
-cd "private" || (echo "Directory 'private' not found." && exit 1)
 # tls_www_server - This certificate will be used for a TLS server.
 # encryption_key - This certificate will be used to encrypt data. Needed in TLS RSA cipher-suites. Its preferred to use different keys for encryption and signing.
 echo "organization = \"${ORGANIZATION}\"
