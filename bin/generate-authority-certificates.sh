@@ -58,7 +58,7 @@ fi
 if [ -f "${INTERMEDIATE_CERTIFICATE}" ]; then
     echo "INTERMEDIATE_CERTIFICATE already exists: ${INTERMEDIATE_CERTIFICATE}"
 else
-    INTERMEDIATE_REQUEST_FILE="${FULLY_QUALIFIED_DOMAIN_NAME}.intermediate-certificate.csr"
+    INTERMEDIATE_REQUEST_FILE="${DOMAIN_NAME}.intermediate-certificate.csr"
     ${CERTTOOL} --generate-request --template "${TEMPLATE}" --load-privkey "${INTERMEDIATE_PRIVATE_KEY}" --outfile "${INTERMEDIATE_REQUEST_FILE}"
     ${CERTTOOL} --generate-certificate --load-request "${INTERMEDIATE_REQUEST_FILE}" --load-ca-certificate "${AUTHORITY_CERTIFICATE}" --load-ca-privkey "${AUTHORITY_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${INTERMEDIATE_CERTIFICATE}"
     rm "${INTERMEDIATE_REQUEST_FILE}"

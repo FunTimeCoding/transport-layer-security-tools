@@ -28,8 +28,8 @@ if [ ! -f "${SERIAL_FILE}" ]; then
 fi
 
 SERIAL=$(cat "${SERIAL_FILE}")
-COMMON_NAME="${NODE_NAME}.${FULLY_QUALIFIED_DOMAIN_NAME}"
-ADDRESS=$(arp -n "${FULLY_QUALIFIED_DOMAIN_NAME}" | sed "s/.*(\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\)).*/\1/g")
+COMMON_NAME="${NODE_NAME}.${DOMAIN_NAME}"
+ADDRESS=$(arp -n "${DOMAIN_NAME}" | sed "s/.*(\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\)).*/\1/g")
 USER_NAME=$(whoami)
 # tls_www_server - This certificate will be used for a TLS server.
 # encryption_key - This certificate will be used to encrypt data. Needed in TLS RSA cipher-suites. Its preferred to use different keys for encryption and signing.
@@ -41,12 +41,12 @@ cn = \"${COMMON_NAME}\"
 serial = ${SERIAL}
 expiration_days = 365
 uid = \"${USER_NAME}\"
-dns_name = \"${FULLY_QUALIFIED_DOMAIN_NAME}\"
+dns_name = \"${DOMAIN_NAME}\"
 ip_address = \"${ADDRESS}\"
 tls_www_server
 encryption_key" > "${TEMPLATE}"
-NODE_PRIVATE_KEY="${NODE_NAME}.${FULLY_QUALIFIED_DOMAIN_NAME}.node-private-key.pem"
-NODE_CERTIFICATE="${NODE_NAME}.${FULLY_QUALIFIED_DOMAIN_NAME}.node-certificate.crt"
+NODE_PRIVATE_KEY="${NODE_NAME}.${DOMAIN_NAME}.node-private-key.pem"
+NODE_CERTIFICATE="${NODE_NAME}.${DOMAIN_NAME}.node-certificate.crt"
 
 if [ -f "${NODE_PRIVATE_KEY}" ]; then
     echo "NODE_PRIVATE_KEY already exists: ${NODE_PRIVATE_KEY}"
@@ -57,7 +57,7 @@ fi
 if [ -f "${NODE_CERTIFICATE}" ]; then
     echo "NODE_CERTIFICATE already exists: ${NODE_CERTIFICATE}"
 else
-    NODE_REQUEST_FILE="${NODE_NAME}.${FULLY_QUALIFIED_DOMAIN_NAME}.node-certificate.csr"
+    NODE_REQUEST_FILE="${NODE_NAME}.${DOMAIN_NAME}.node-certificate.csr"
     ${CERTTOOL} --generate-request --template "${TEMPLATE}" --load-privkey "${NODE_PRIVATE_KEY}" --outfile "${NODE_REQUEST_FILE}"
     ${CERTTOOL} --generate-certificate --load-request "${NODE_REQUEST_FILE}" --load-ca-certificate "${INTERMEDIATE_CERTIFICATE}" --load-ca-privkey "${INTERMEDIATE_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${NODE_CERTIFICATE}"
     rm "${NODE_REQUEST_FILE}"

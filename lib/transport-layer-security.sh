@@ -80,8 +80,8 @@ validate_config()
         echo "validate_config"
     fi
 
-    if [ "${FULLY_QUALIFIED_DOMAIN_NAME}" = "" ]; then
-        echo "FULLY_QUALIFIED_DOMAIN_NAME not set."
+    if [ "${DOMAIN_NAME}" = "" ]; then
+        echo "DOMAIN_NAME not set."
 
         exit 1;
     fi
@@ -128,10 +128,10 @@ define_library_variables()
     fi
 
     export TEMPLATE="/tmp/certtool_template"
-    export AUTHORITY_PRIVATE_KEY="${FULLY_QUALIFIED_DOMAIN_NAME}.authority-private-key.pem"
-    export AUTHORITY_CERTIFICATE="${FULLY_QUALIFIED_DOMAIN_NAME}.authority-certificate.crt"
-    export INTERMEDIATE_PRIVATE_KEY="${FULLY_QUALIFIED_DOMAIN_NAME}.intermediate-private-key.pem"
-    export INTERMEDIATE_CERTIFICATE="${FULLY_QUALIFIED_DOMAIN_NAME}.intermediate-certificate.crt"
+    export AUTHORITY_PRIVATE_KEY="${DOMAIN_NAME}.authority-private-key.pem"
+    export AUTHORITY_CERTIFICATE="${DOMAIN_NAME}.authority-certificate.crt"
+    export INTERMEDIATE_PRIVATE_KEY="${DOMAIN_NAME}.intermediate-private-key.pem"
+    export INTERMEDIATE_CERTIFICATE="${DOMAIN_NAME}.intermediate-certificate.crt"
 }
 
 define_library_variables

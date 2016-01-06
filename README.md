@@ -5,7 +5,7 @@
 Create a settings file named `~/.transport-layer-security-tools.conf`.
 
 ```sh
-FULLY_QUALIFIED_DOMAIN_NAME="example.org"
+DOMAIN_NAME="example.org"
 ORGANIZATION="Example Organization"
 ORGANIZATIONAL_UNIT="Software Development"
 STATE="Example State"
