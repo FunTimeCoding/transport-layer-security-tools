@@ -71,7 +71,6 @@ find_config()
 }
 
 find_config
-
 # shellcheck source=/dev/null
 . "${CONFIG}"
 
@@ -116,6 +115,10 @@ validate_config
 
 define_library_variables()
 {
+    if [ "${VERBOSE}" = true ]; then
+        echo "define_library_variables"
+    fi
+
     OPERATING_SYSTEM=$(uname)
 
     if [ "${OPERATING_SYSTEM}" = "Darwin" ]; then
@@ -127,9 +130,8 @@ define_library_variables()
     export TEMPLATE="/tmp/certtool_template"
     export AUTHORITY_PRIVATE_KEY="${FULLY_QUALIFIED_DOMAIN_NAME}.authority-private-key.pem"
     export AUTHORITY_CERTIFICATE="${FULLY_QUALIFIED_DOMAIN_NAME}.authority-certificate.crt"
-    export SIGNING_PRIVATE_KEY="${FULLY_QUALIFIED_DOMAIN_NAME}.signing-private-key.pem"
-    export SIGNING_REQUEST_FILE="${FULLY_QUALIFIED_DOMAIN_NAME}.signing-certificate.csr"
-    export SIGNING_CERTIFICATE="${FULLY_QUALIFIED_DOMAIN_NAME}.signing-certificate.crt"
+    export INTERMEDIATE_PRIVATE_KEY="${FULLY_QUALIFIED_DOMAIN_NAME}.intermediate-private-key.pem"
+    export INTERMEDIATE_CERTIFICATE="${FULLY_QUALIFIED_DOMAIN_NAME}.intermediate-certificate.crt"
 }
 
 define_library_variables
