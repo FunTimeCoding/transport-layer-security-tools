@@ -2,28 +2,22 @@
 
 ## Usage
 
-First, generate a master key and certificate. Keep them very private. This is called a level 1 certificate. 
+First, generate authority and intermediate keys and certificates. Keep them very private.
 
 ```sh
-./bin/generate-authority-certificate.sh
+./bin/generate-authority-certificates.sh
 ```
 
-Then generate a signing key and certificate to be able to securely generate any amount of encryption keys and certificates. This is called a level 2 certificate.
+Then you can generate as many node encryption keys and certificates as you want.
 
 ```sh
-./bin/generate-signing-certificate.sh
-```
-
-Lastly, you can generate as many service encryption keys and certificates as you want. They are called level 3 certificates.
-
-```sh
-./bin/generate-service-certificate.sh ldap
+./bin/generate-node-certificate.sh ldap
 ```
 
 Print and validate all generated certificates.
 
 ```sh
 ./bin/validate-certificate.sh private/example.org.authority-certificate.crt
-./bin/validate-certificate.sh private/example.org.signing-certificate.crt
-./bin/validate-certificate.sh private/ldap.example.org.service-certificate.crt
+./bin/validate-certificate.sh private/example.org.intermediate-certificate.crt
+./bin/validate-certificate.sh private/ldap.example.org.node-certificate.crt
 ```
