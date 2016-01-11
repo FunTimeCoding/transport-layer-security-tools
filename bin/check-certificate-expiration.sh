@@ -17,14 +17,16 @@ OPERATING_SYSTEM=$(uname)
 
 if [ "${OPERATING_SYSTEM}" = "Darwin" ]; then
     CERTTOOL="gnutls-certtool"
+    DATE="gdate"
 else
     CERTTOOL="certtool"
+    DATE="date"
 fi
 
 VALIDITY=$(${CERTTOOL} --certificate-info --infile "${FILE_NAME}" | grep Validity -A 2 | grep After | xargs)
 VALIDITY="${VALIDITY#*: }"
-EXPIRATION_TIME=$(gdate -d "${VALIDITY}" +"%s")
-NOW=$(gdate +"%s")
+EXPIRATION_TIME=$(${DATE} -d "${VALIDITY}" +"%s")
+NOW=$(${DATE} +"%s")
 SECONDS=$((${EXPIRATION_TIME} - ${NOW}))
 DAYS=$((${SECONDS} / 60 / 60 / 24))
 echo "${DAYS}"
