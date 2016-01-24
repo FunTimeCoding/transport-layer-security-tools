@@ -2,13 +2,19 @@
 
 DIRECTORY=$(dirname "${0}")
 SCRIPT_DIRECTORY=$(cd "${DIRECTORY}" || exit 1; pwd)
+WITH_ADDRESS=false
 
 usage()
 {
     echo "Generate a node certificate using the intermediate certificate. Nodes can be services or clients."
-    echo "Local usage: ${0} NODE_NAME"
+    echo "Local usage: ${0} [--with-address] NODE_NAME"
     echo "Example: ${0} ldap"
 }
+
+if [ "${1}" = "--with-address" ]; then
+    shift
+    WITH_ADDRESS=true
+fi
 
 # shellcheck source=/dev/null
 . "${SCRIPT_DIRECTORY}/../lib/transport-layer-security.sh"
@@ -21,7 +27,7 @@ if [ "${NODE_NAME}" = "" ]; then
 fi
 
 cd "private" || (echo "Directory 'private' not found." && exit 1)
-SERIAL_FILE="node_certificate_serial"
+SERIAL_FILE="${DOMAIN_NAME}.node_certificate_serial.txt"
 
 if [ ! -f "${SERIAL_FILE}" ]; then
     echo "001" > "${SERIAL_FILE}"
@@ -29,12 +35,15 @@ fi
 
 SERIAL=$(cat "${SERIAL_FILE}")
 COMMON_NAME="${NODE_NAME}.${DOMAIN_NAME}"
-ADDRESS=$(dig +short "${COMMON_NAME}")
 
-if [ "${ADDRESS}" = "" ]; then
-    echo "Could not determine the address for ${COMMON_NAME}."
+if [ "${WITH_ADDRESS}" = true ]; then
+    ADDRESS=$(dig +short "${COMMON_NAME}")
 
-    exit 1
+    if [ "${ADDRESS}" = "" ]; then
+        echo "Could not determine the address for ${COMMON_NAME}."
+
+        exit 1
+    fi
 fi
 
 USER_NAME=$(whoami)
@@ -49,9 +58,13 @@ serial = ${SERIAL}
 expiration_days = 365
 uid = \"${USER_NAME}\"
 dns_name = \"${DOMAIN_NAME}\"
-ip_address = \"${ADDRESS}\"
 tls_www_server
 encryption_key" > "${TEMPLATE}"
+
+if [ "${WITH_ADDRESS}" = true ]; then
+    echo "ip_address = \"${ADDRESS}\"" >> "${TEMPLATE}"
+fi
+
 NODE_PRIVATE_KEY="${NODE_NAME}.${DOMAIN_NAME}.node-private-key.pem"
 NODE_CERTIFICATE="${NODE_NAME}.${DOMAIN_NAME}.node-certificate.crt"
 
