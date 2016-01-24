@@ -29,7 +29,14 @@ fi
 
 SERIAL=$(cat "${SERIAL_FILE}")
 COMMON_NAME="${NODE_NAME}.${DOMAIN_NAME}"
-ADDRESS=$(arp -n "${DOMAIN_NAME}" | sed "s/.*(\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\)).*/\1/g")
+ADDRESS=$(dig +short "${COMMON_NAME}")
+
+if [ "${ADDRESS}" = "" ]; then
+    echo "Could not determine the address for ${COMMON_NAME}."
+
+    exit 1
+fi
+
 USER_NAME=$(whoami)
 # tls_www_server - This certificate will be used for a TLS server.
 # encryption_key - This certificate will be used to encrypt data. Needed in TLS RSA cipher-suites. Its preferred to use different keys for encryption and signing.
