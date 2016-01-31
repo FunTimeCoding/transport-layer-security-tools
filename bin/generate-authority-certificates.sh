@@ -11,7 +11,7 @@ usage()
 
 # shellcheck source=/dev/null
 . "${SCRIPT_DIRECTORY}/../lib/transport-layer-security.sh"
-cd "private" || (echo "Directory 'private' not found." && exit 1)
+cd "${PRIVATE_DIRECTORY}" || (echo "Directory '${PRIVATE_DIRECTORY}' not found." && exit 1)
 # ca - This is a CA certificate.
 # cert_signing_key - Certificate will be used to sign other certificates.
 # crl_signing_key - Certificate will be used to sign CRLs.

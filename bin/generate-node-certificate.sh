@@ -26,7 +26,7 @@ if [ "${NODE_NAME}" = "" ]; then
     exit 1
 fi
 
-cd "private" || (echo "Directory 'private' not found." && exit 1)
+cd "${PRIVATE_DIRECTORY}" || (echo "Directory '${PRIVATE_DIRECTORY}' not found." && exit 1)
 SERIAL_FILE="${DOMAIN_NAME}.node_certificate_serial.txt"
 
 if [ ! -f "${SERIAL_FILE}" ]; then

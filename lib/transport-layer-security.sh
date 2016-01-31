@@ -132,6 +132,10 @@ define_library_variables()
     export AUTHORITY_CERTIFICATE="${DOMAIN_NAME}.authority-certificate.crt"
     export INTERMEDIATE_PRIVATE_KEY="${DOMAIN_NAME}.intermediate-private-key.pem"
     export INTERMEDIATE_CERTIFICATE="${DOMAIN_NAME}.intermediate-certificate.crt"
+
+    if [ "${PRIVATE_DIRECTORY}" = "" ]; then
+        export PRIVATE_DIRECTORY="private"
+    fi
 }
 
 define_library_variables
