@@ -17,7 +17,7 @@ if [ "${1}" = "--with-address" ]; then
 fi
 
 # shellcheck source=/dev/null
-. "${SCRIPT_DIRECTORY}/../lib/transport-layer-security.sh"
+. "${SCRIPT_DIRECTORY}/../lib/transport-layer-security-tools.sh"
 NODE_NAME="${1}"
 
 if [ "${NODE_NAME}" = "" ]; then

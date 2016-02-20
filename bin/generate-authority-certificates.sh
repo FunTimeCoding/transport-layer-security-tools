@@ -10,7 +10,7 @@ usage()
 }
 
 # shellcheck source=/dev/null
-. "${SCRIPT_DIRECTORY}/../lib/transport-layer-security.sh"
+. "${SCRIPT_DIRECTORY}/../lib/transport-layer-security-tools.sh"
 cd "${PRIVATE_DIRECTORY}" || (echo "Directory '${PRIVATE_DIRECTORY}' not found." && exit 1)
 # ca - This is a CA certificate.
 # cert_signing_key - Certificate will be used to sign other certificates.
