@@ -8,7 +8,7 @@ Generate authority and intermediate keys and certificates. Keep them very privat
 ./bin/generate-authority-certificates.sh
 ```
 
-Then you can generate as many node encryption keys and certificates as you want.
+Then generate node encryption keys and certificates.
 
 ```sh
 ./bin/generate-node-certificate.sh ldap
