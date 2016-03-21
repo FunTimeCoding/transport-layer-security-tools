@@ -14,15 +14,29 @@ Then generate node encryption keys and certificates.
 ./bin/generate-node-certificate.sh ldap
 ```
 
-Print and validate all generated certificates.
+Show certificate information.
 
 ```sh
-./bin/validate-certificate.sh private/example.org.authority-certificate.crt
-./bin/validate-certificate.sh private/example.org.intermediate-certificate.crt
-./bin/validate-certificate.sh private/ldap.example.org.node-certificate.crt
+./bin/show-certificate-info.sh private/example.org.authority-certificate.crt
+./bin/show-certificate-info.sh private/example.org.intermediate-certificate.crt
+./bin/show-certificate-info.sh private/ldap.example.org.node-certificate.crt
 ```
 
-Use a alternative config file with different settings.
+Show private key information.
+
+```sh
+./bin/show-key-info.sh private/example.org.authority-private-key.pem
+./bin/show-key-info.sh private/example.org.intermediate-private-key.pem
+./bin/show-ldap.example.org.node-private-key.pem
+```
+
+Verify that a certificate was issued by an authority.
+
+```sh
+verify-issued-certificate.sh private/example.org.authority-certificate.crt private/example.org.intermediate-certificate.crt
+```
+
+Use alternative config file with different settings.
 
 ```sh
 ./bin/generate-authority-certificates.sh -c ~/.tls-tools-alternative.conf
