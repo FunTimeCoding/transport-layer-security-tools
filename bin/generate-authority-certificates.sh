@@ -35,7 +35,7 @@ fi
 if [ -f "${AUTHORITY_CERTIFICATE}" ]; then
     echo "AUTHORITY_CERTIFICATE already exists: ${AUTHORITY_CERTIFICATE}"
 else
-    ${CERTTOOL} --generate-self-signed --template "${TEMPLATE}" --load-privkey "${AUTHORITY_PRIVATE_KEY}" --outfile "${AUTHORITY_CERTIFICATE}"
+    ${CERTTOOL} --generate-self-signed --load-privkey "${AUTHORITY_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${AUTHORITY_CERTIFICATE}"
 fi
 
 echo "organization = \"${ORGANIZATION}\"
@@ -59,8 +59,8 @@ if [ -f "${INTERMEDIATE_CERTIFICATE}" ]; then
     echo "INTERMEDIATE_CERTIFICATE already exists: ${INTERMEDIATE_CERTIFICATE}"
 else
     INTERMEDIATE_REQUEST_FILE="${DOMAIN_NAME}.intermediate-certificate.csr"
-    ${CERTTOOL} --generate-request --template "${TEMPLATE}" --load-privkey "${INTERMEDIATE_PRIVATE_KEY}" --outfile "${INTERMEDIATE_REQUEST_FILE}"
-    ${CERTTOOL} --generate-certificate --load-request "${INTERMEDIATE_REQUEST_FILE}" --load-ca-certificate "${AUTHORITY_CERTIFICATE}" --load-ca-privkey "${AUTHORITY_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${INTERMEDIATE_CERTIFICATE}"
+    ${CERTTOOL} --generate-request --load-privkey "${INTERMEDIATE_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${INTERMEDIATE_REQUEST_FILE}"
+    ${CERTTOOL} --generate-certificate --load-request "${INTERMEDIATE_REQUEST_FILE}" --load-ca-privkey "${AUTHORITY_PRIVATE_KEY}" --load-ca-certificate "${AUTHORITY_CERTIFICATE}" --template "${TEMPLATE}" --outfile "${INTERMEDIATE_CERTIFICATE}"
     rm "${INTERMEDIATE_REQUEST_FILE}"
 fi
 

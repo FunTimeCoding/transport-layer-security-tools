@@ -78,8 +78,8 @@ if [ -f "${NODE_CERTIFICATE}" ]; then
     echo "NODE_CERTIFICATE already exists: ${NODE_CERTIFICATE}"
 else
     NODE_REQUEST_FILE="${NODE_NAME}.${DOMAIN_NAME}.node-certificate.csr"
-    ${CERTTOOL} --generate-request --template "${TEMPLATE}" --load-privkey "${NODE_PRIVATE_KEY}" --outfile "${NODE_REQUEST_FILE}"
-    ${CERTTOOL} --generate-certificate --load-request "${NODE_REQUEST_FILE}" --load-ca-certificate "${INTERMEDIATE_CERTIFICATE}" --load-ca-privkey "${INTERMEDIATE_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${NODE_CERTIFICATE}"
+    ${CERTTOOL} --generate-request --load-privkey "${NODE_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${NODE_REQUEST_FILE}"
+    ${CERTTOOL} --generate-certificate --load-request "${NODE_REQUEST_FILE}" --load-ca-privkey "${INTERMEDIATE_PRIVATE_KEY}" --load-ca-certificate "${INTERMEDIATE_CERTIFICATE}" --template "${TEMPLATE}" --outfile "${NODE_CERTIFICATE}"
     rm "${NODE_REQUEST_FILE}"
 fi
 
