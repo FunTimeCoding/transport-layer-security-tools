@@ -38,6 +38,8 @@ else
     ${CERTTOOL} --generate-self-signed --load-privkey "${AUTHORITY_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${AUTHORITY_CERTIFICATE}"
 fi
 
+cat "${AUTHORITY_CERTIFICATE}" > "${CERTIFICATE_CHAIN}"
+
 echo "organization = \"${ORGANIZATION}\"
 unit = \"${ORGANIZATIONAL_UNIT}\"
 state = \"${STATE}\"
@@ -63,5 +65,7 @@ else
     ${CERTTOOL} --generate-certificate --load-request "${INTERMEDIATE_REQUEST_FILE}" --load-ca-privkey "${AUTHORITY_PRIVATE_KEY}" --load-ca-certificate "${AUTHORITY_CERTIFICATE}" --template "${TEMPLATE}" --outfile "${INTERMEDIATE_CERTIFICATE}"
     rm "${INTERMEDIATE_REQUEST_FILE}"
 fi
+
+cat "${INTERMEDIATE_CERTIFICATE}" >> "${CERTIFICATE_CHAIN}"
 
 rm "${TEMPLATE}"
