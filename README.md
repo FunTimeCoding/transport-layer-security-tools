@@ -30,10 +30,10 @@ Show private key information.
 ./bin/show-ldap.example.org.node-private-key.pem
 ```
 
-Verify that a certificate was issued by an authority.
+Verify that an issued certificate was signed by a specific instance.
 
 ```sh
-verify-issued-certificate.sh private/example.org.authority-certificate.crt private/example.org.intermediate-certificate.crt
+./bin/verify-issued-certificate.sh private/example.org.authority-certificate.crt private/example.org.intermediate-certificate.crt
 ```
 
 Use alternative config file with different settings.

@@ -2,13 +2,13 @@
 
 usage()
 {
-    echo "Usage: ${0} AUTHORITY_CERTIFICATE ISSUED_CERTIFICATE"
+    echo "Usage: ${0} ISSUER_CERTIFICATE ISSUED_CERTIFICATE"
 }
 
-AUTHORITY_CERTIFICATE="${1}"
+ISSUER_CERTIFICATE="${1}"
 ISSUED_CERTIFICATE="${2}"
 
-if [ "${AUTHORITY_CERTIFICATE}" = "" ] || [ "${ISSUED_CERTIFICATE}" = "" ]; then
+if [ "${ISSUER_CERTIFICATE}" = "" ] || [ "${ISSUED_CERTIFICATE}" = "" ]; then
     usage
 
     exit 1
@@ -22,4 +22,4 @@ else
     CERTTOOL="certtool"
 fi
 
-${CERTTOOL} --verify --load-ca-certificate "${AUTHORITY_CERTIFICATE}" --infile "${ISSUED_CERTIFICATE}"
+${CERTTOOL} --verify --load-ca-certificate "${ISSUER_CERTIFICATE}" --infile "${ISSUED_CERTIFICATE}"
