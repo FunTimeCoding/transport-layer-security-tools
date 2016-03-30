@@ -54,6 +54,7 @@ unit = \"${ORGANIZATIONAL_UNIT}\"
 state = \"${STATE}\"
 country = ${COUNTRY_CODE}
 cn = \"${COMMON_NAME}\"
+dns_name = \"${COMMON_NAME}\"
 serial = ${SERIAL}
 expiration_days = 365
 uid = \"${USER_NAME}\"
