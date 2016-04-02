@@ -2,6 +2,8 @@
 
 ## Usage
 
+This section explains how to use this project.
+
 Create authority and intermediate keys and certificates. Keep them very private.
 
 ```sh
@@ -12,6 +14,12 @@ Create node encryption keys and certificates. Requires authority certificates fi
 
 ```sh
 bin/create-node-certificate.sh ldap
+```
+
+Check that a server has a valid private key. This is the main use case of SSL.
+
+```sh
+bin/check-server-certificate.sh ldap.example.org /tmp/ca_certs.pem
 ```
 
 Check that an issued certificate was signed by a specific instance.

@@ -13,12 +13,4 @@ if [ "${FILE_NAME}" = "" ]; then
     exit 1
 fi
 
-OPERATING_SYSTEM=$(uname)
-
-if [ "${OPERATING_SYSTEM}" = "Darwin" ]; then
-    CERTTOOL="gnutls-certtool"
-else
-    CERTTOOL="certtool"
-fi
-
 ${CERTTOOL} --key-info --infile "${FILE_NAME}"
