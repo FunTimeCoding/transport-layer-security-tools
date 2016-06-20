@@ -6,9 +6,9 @@ WITH_ADDRESS=false
 
 usage()
 {
-    echo "Generate a node certificate using the intermediate certificate. Nodes can be services or clients."
-    echo "Local usage: ${0} [--with-address] NODE_NAME"
-    echo "Example: ${0} ldap"
+    echo "Generate a wildcard certificate using the intermediate certificate."
+    echo "Local usage: ${0} [--with-address]"
+    echo "Example: ${0}"
 }
 
 if [ "${1}" = --with-address ]; then
@@ -18,13 +18,6 @@ fi
 
 # shellcheck source=/dev/null
 . "${SCRIPT_DIRECTORY}/../lib/transport-layer-security-tools.sh"
-NODE_NAME="${1}"
-
-if [ "${NODE_NAME}" = "" ]; then
-    usage
-
-    exit 1
-fi
 
 cd "${PRIVATE_DIRECTORY}" || (echo "Directory '${PRIVATE_DIRECTORY}' not found." && exit 1)
 SERIAL_FILE="${DOMAIN_NAME}.certificate_serial.txt"
@@ -34,13 +27,13 @@ if [ ! -f "${SERIAL_FILE}" ]; then
 fi
 
 SERIAL=$(cat "${SERIAL_FILE}")
-COMMON_NAME="${NODE_NAME}.${DOMAIN_NAME}"
+COMMON_NAME="*.${DOMAIN_NAME}"
 
 if [ "${WITH_ADDRESS}" = true ]; then
-    ADDRESS=$(dig +short "${COMMON_NAME}")
+    ADDRESS=$(dig +short "${DOMAIN_NAME}")
 
     if [ "${ADDRESS}" = "" ]; then
-        echo "Could not determine the address for ${COMMON_NAME}."
+        echo "Could not determine the address for ${DOMAIN_NAME}."
 
         exit 1
     fi
@@ -54,7 +47,7 @@ unit = \"${ORGANIZATIONAL_UNIT}\"
 state = \"${STATE}\"
 country = ${COUNTRY_CODE}
 cn = \"${COMMON_NAME}\"
-dns_name = \"${COMMON_NAME}\"
+dns_name = \"${DOMAIN_NAME}\"
 serial = ${SERIAL}
 expiration_days = 365
 uid = \"${USER_NAME}\"
@@ -65,22 +58,22 @@ if [ "${WITH_ADDRESS}" = true ]; then
     echo "ip_address = \"${ADDRESS}\"" >> "${TEMPLATE}"
 fi
 
-NODE_PRIVATE_KEY="${NODE_NAME}.${DOMAIN_NAME}.node-private-key.pem"
-NODE_CERTIFICATE="${NODE_NAME}.${DOMAIN_NAME}.node-certificate.crt"
+WILDCARD_PRIVATE_KEY="${DOMAIN_NAME}.wildcard-private-key.pem"
+WILDCARD_CERTIFICATE="${DOMAIN_NAME}.wildcard-certificate.crt"
 
-if [ -f "${NODE_PRIVATE_KEY}" ]; then
-    echo "NODE_PRIVATE_KEY already exists: ${NODE_PRIVATE_KEY}"
+if [ -f "${WILDCARD_PRIVATE_KEY}" ]; then
+    echo "WILDCARD_PRIVATE_KEY already exists: ${WILDCARD_PRIVATE_KEY}"
 else
-    ${CERTTOOL} --generate-privkey --outfile "${NODE_PRIVATE_KEY}"
+    ${CERTTOOL} --generate-privkey --outfile "${WILDCARD_PRIVATE_KEY}"
 fi
 
-if [ -f "${NODE_CERTIFICATE}" ]; then
-    echo "NODE_CERTIFICATE already exists: ${NODE_CERTIFICATE}"
+if [ -f "${WILDCARD_CERTIFICATE}" ]; then
+    echo "WILDCARD_CERTIFICATE already exists: ${WILDCARD_CERTIFICATE}"
 else
-    NODE_REQUEST_FILE="${NODE_NAME}.${DOMAIN_NAME}.node-certificate.csr"
-    ${CERTTOOL} --generate-request --load-privkey "${NODE_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${NODE_REQUEST_FILE}"
-    ${CERTTOOL} --generate-certificate --load-request "${NODE_REQUEST_FILE}" --load-ca-privkey "${INTERMEDIATE_PRIVATE_KEY}" --load-ca-certificate "${INTERMEDIATE_CERTIFICATE}" --template "${TEMPLATE}" --outfile "${NODE_CERTIFICATE}"
-    rm "${NODE_REQUEST_FILE}"
+    WILDCARD_REQUEST_FILE="${DOMAIN_NAME}.wildcard-certificate.csr"
+    ${CERTTOOL} --generate-request --load-privkey "${WILDCARD_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${WILDCARD_REQUEST_FILE}"
+    ${CERTTOOL} --generate-certificate --load-request "${WILDCARD_REQUEST_FILE}" --load-ca-privkey "${INTERMEDIATE_PRIVATE_KEY}" --load-ca-certificate "${INTERMEDIATE_CERTIFICATE}" --template "${TEMPLATE}" --outfile "${WILDCARD_CERTIFICATE}"
+    rm "${WILDCARD_REQUEST_FILE}"
 fi
 
 NEXT_SERIAL=$(echo "${SERIAL} + 1" | bc)

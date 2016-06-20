@@ -12,23 +12,18 @@ function_exists()
 
 while true; do
     case ${1} in
-        -c|--config)
+        --config)
             CONFIG=${2-}
             shift 2
             ;;
-        -h|--help)
-            echo "Global usage: [-v|--verbose][-d|--debug][-h|--help][-c|--config CONFIG]"
+        --help)
+            echo "Global usage: [--verbose][--help][--config CONFIG]"
             function_exists usage && usage
 
             exit 0
             ;;
-        -v|--verbose)
+        --verbose)
             VERBOSE=true
-            echo "Verbose mode enabled."
-            shift
-            ;;
-        -d|--debug)
-            set -x
             shift
             ;;
         *)
@@ -121,13 +116,13 @@ define_library_variables()
 
     OPERATING_SYSTEM=$(uname)
 
-    if [ "${OPERATING_SYSTEM}" = "Darwin" ]; then
-        export CERTTOOL="gnutls-certtool"
+    if [ "${OPERATING_SYSTEM}" = Darwin ]; then
+        export CERTTOOL=gnutls-certtool
     else
-        export CERTTOOL="certtool"
+        export CERTTOOL=certtool
     fi
 
-    export TEMPLATE="/tmp/certtool_template"
+    export TEMPLATE=/tmp/certtool_template
     export AUTHORITY_PRIVATE_KEY="${DOMAIN_NAME}.authority-private-key.pem"
     export AUTHORITY_CERTIFICATE="${DOMAIN_NAME}.authority-certificate.crt"
     export INTERMEDIATE_PRIVATE_KEY="${DOMAIN_NAME}.intermediate-private-key.pem"
@@ -135,7 +130,7 @@ define_library_variables()
     export CERTIFICATE_CHAIN="${DOMAIN_NAME}.certificate-chain.pem"
 
     if [ "${PRIVATE_DIRECTORY}" = "" ]; then
-        export PRIVATE_DIRECTORY="private"
+        export PRIVATE_DIRECTORY=private
     fi
 }
 

@@ -54,18 +54,8 @@ bin/create-authority-certificates.sh -c ~/.tls-tools-alternative.conf
 
 ## Setup
 
-Create a settings file named `~/.transport-layer-security-tools.conf`.
+Copy the example settings file.
 
 ```sh
-DOMAIN_NAME="example.org"
-ORGANIZATION="Example Organization"
-ORGANIZATIONAL_UNIT="Software Development"
-STATE="Example State"
-COUNTRY_CODE="EC"
-```
-
-Optionally specify the directory where to store keys and certificates.
-
-```sh
-PRIVATE_DIRECTORY="/home/example/tls"
+cp example-config.conf ~/.transport-layer-security-tools.conf
 ```
