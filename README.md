@@ -51,6 +51,15 @@ Use alternative config file with different settings.
 bin/create-authority-certificates.sh -c ~/.tls-tools-alternative.conf
 ```
 
+Install certificates on Debian systems.
+
+```sh
+cp private/example.org.authority-certificate.crt /usr/local/share/ca-certificates
+cp private/example.org.intermediate-certificate.crt /usr/local/share/ca-certificates
+cp private/example.org.wildcard-certificate.crt /usr/local/share/ca-certificates
+sudo update-ca-certificates --fresh
+```
+
 
 ## Setup
 
