@@ -51,13 +51,12 @@ Use alternative config file with different settings.
 bin/create-authority-certificates.sh -c ~/.tls-tools-alternative.conf
 ```
 
-Install certificates on Debian systems.
+Install certificates on a Debian system running Dnsmasq and Lighttpd.
 
 ```sh
-cp private/example.org.authority-certificate.crt /usr/local/share/ca-certificates
-cp private/example.org.intermediate-certificate.crt /usr/local/share/ca-certificates
-cp private/example.org.wildcard-certificate.crt /usr/local/share/ca-certificates
-sudo update-ca-certificates --fresh
+bin/install-all-certificates-locally.sh
+bin/install-dnsmasq-config.sh example-service.example-hostname
+bin/install-lighttpd-config.sh example-service.example-hostname
 ```
 
 
