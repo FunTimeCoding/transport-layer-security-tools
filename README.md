@@ -57,5 +57,5 @@ bin/create-authority-certificates.sh -c ~/.tls-tools-alternative.conf
 Copy the example settings file.
 
 ```sh
-cp example-config.conf ~/.transport-layer-security-tools.conf
+cp example.conf ~/.transport-layer-security-tools.conf
 ```
