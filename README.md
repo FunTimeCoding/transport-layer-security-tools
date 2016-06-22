@@ -62,6 +62,12 @@ bin/install-lighttpd-config.sh example-service.example-hostname
 
 ## Setup
 
+Install dependencies on Debian.
+
+```sh
+sudo apt-get -qq install realpath gnutls-bin bc
+```
+
 Copy the example settings file.
 
 ```sh
