@@ -81,6 +81,8 @@ fi
 NODE_BUNDLE="${PRIVATE_DIRECTORY}/${NODE_NAME}.node-bundle.pem"
 
 if [ ! -f "${NODE_BUNDLE}" ]; then
-    cat "${NODE_PRIVATE_KEY}" > "${NODE_BUNDLE}"
+    touch "${NODE_BUNDLE}"
+    chmod 600 "${NODE_BUNDLE}"
+    cat "${NODE_PRIVATE_KEY}" >> "${NODE_BUNDLE}"
     cat "${NODE_CERTIFICATE}" >> "${NODE_BUNDLE}"
 fi

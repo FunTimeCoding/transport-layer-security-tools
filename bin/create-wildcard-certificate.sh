@@ -78,6 +78,8 @@ fi
 WILDCARD_BUNDLE="${PRIVATE_DIRECTORY}/${WILDCARD_NAME}.wildcard-bundle.pem"
 
 if [ ! -f "${WILDCARD_BUNDLE}" ]; then
-    cat "${WILDCARD_PRIVATE_KEY}" > "${WILDCARD_BUNDLE}"
+    touch "${WILDCARD_BUNDLE}"
+    chmod 600 "${WILDCARD_BUNDLE}"
+    cat "${WILDCARD_PRIVATE_KEY}" >> "${WILDCARD_BUNDLE}"
     cat "${WILDCARD_CERTIFICATE}" >> "${WILDCARD_BUNDLE}"
 fi
