@@ -11,61 +11,57 @@ usage()
 
 # shellcheck source=/dev/null
 . "${SCRIPT_DIRECTORY}/../lib/transport-layer-security-tools.sh"
-cd "${PRIVATE_DIRECTORY}" || (echo "Directory '${PRIVATE_DIRECTORY}' not found." && exit 1)
-# ca - This is a CA certificate.
-# cert_signing_key - Certificate will be used to sign other certificates.
-# crl_signing_key - Certificate will be used to sign CRLs.
-echo "organization = \"${ORGANIZATION}\"
+
+if [ ! -f "${AUTHORITY_PRIVATE_KEY}" ]; then
+    ${CERTTOOL} --generate-privkey --outfile "${AUTHORITY_PRIVATE_KEY}"
+fi
+
+if [ ! -f "${AUTHORITY_CERTIFICATE}" ]; then
+    AUTHORITY_SERIAL=$(cat "${AUTHORITY_SERIAL_FILE}")
+    # ca - This is a CA certificate.
+    # cert_signing_key - Certificate will be used to sign other certificates.
+    # crl_signing_key - Certificate will be used to sign CRLs.
+    echo "organization = \"${ORGANIZATION}\"
 unit = \"${ORGANIZATIONAL_UNIT}\"
 state = \"${STATE}\"
 country = ${COUNTRY_CODE}
 cn = \"${ORGANIZATION} Certificate Authority\"
-serial = 001
+serial = ${AUTHORITY_SERIAL}
 expiration_days = 365
 ca
 cert_signing_key
 crl_signing_key" > "${TEMPLATE}"
-
-if [ -f "${AUTHORITY_PRIVATE_KEY}" ]; then
-    echo "AUTHORITY_PRIVATE_KEY already exists: ${AUTHORITY_PRIVATE_KEY}"
-else
-    ${CERTTOOL} --generate-privkey --outfile "${AUTHORITY_PRIVATE_KEY}"
-fi
-
-if [ -f "${AUTHORITY_CERTIFICATE}" ]; then
-    echo "AUTHORITY_CERTIFICATE already exists: ${AUTHORITY_CERTIFICATE}"
-else
     ${CERTTOOL} --generate-self-signed --load-privkey "${AUTHORITY_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${AUTHORITY_CERTIFICATE}"
+    NEXT_AUTHORITY_SERIAL=$(echo "${AUTHORITY_SERIAL} + 1" | bc)
+    NEXT_AUTHORITY_SERIAL=$(printf "%03d" "${NEXT_AUTHORITY_SERIAL}")
+    echo "${NEXT_AUTHORITY_SERIAL}" > "${AUTHORITY_SERIAL_FILE}"
+    cat "${AUTHORITY_CERTIFICATE}" > "${CERTIFICATE_CHAIN}"
+    rm "${TEMPLATE}"
 fi
 
-cat "${AUTHORITY_CERTIFICATE}" > "${CERTIFICATE_CHAIN}"
+if [ ! -f "${INTERMEDIATE_PRIVATE_KEY}" ]; then
+    ${CERTTOOL} --generate-privkey --outfile "${INTERMEDIATE_PRIVATE_KEY}"
+fi
 
-echo "organization = \"${ORGANIZATION}\"
+if [ ! -f "${INTERMEDIATE_CERTIFICATE}" ]; then
+    AUTHORITY_SERIAL=$(cat "${AUTHORITY_SERIAL_FILE}")
+    echo "organization = \"${ORGANIZATION}\"
 unit = \"${ORGANIZATIONAL_UNIT}\"
 state = \"${STATE}\"
 country = ${COUNTRY_CODE}
 cn = \"${ORGANIZATION} Intermediate\"
-serial = 001
+serial = ${AUTHORITY_SERIAL}
 expiration_days = 365
 ca
 cert_signing_key
 crl_signing_key" > "${TEMPLATE}"
-
-if [ -f "${INTERMEDIATE_PRIVATE_KEY}" ]; then
-    echo "INTERMEDIATE_PRIVATE_KEY already exists: ${INTERMEDIATE_PRIVATE_KEY}"
-else
-    ${CERTTOOL} --generate-privkey --outfile "${INTERMEDIATE_PRIVATE_KEY}"
-fi
-
-if [ -f "${INTERMEDIATE_CERTIFICATE}" ]; then
-    echo "INTERMEDIATE_CERTIFICATE already exists: ${INTERMEDIATE_CERTIFICATE}"
-else
-    INTERMEDIATE_REQUEST_FILE="${DOMAIN_NAME}.intermediate-certificate.csr"
+    INTERMEDIATE_REQUEST_FILE="${PRIVATE_DIRECTORY}/${DOMAIN_NAME}.intermediate-certificate.csr"
     ${CERTTOOL} --generate-request --load-privkey "${INTERMEDIATE_PRIVATE_KEY}" --template "${TEMPLATE}" --outfile "${INTERMEDIATE_REQUEST_FILE}"
     ${CERTTOOL} --generate-certificate --load-request "${INTERMEDIATE_REQUEST_FILE}" --load-ca-privkey "${AUTHORITY_PRIVATE_KEY}" --load-ca-certificate "${AUTHORITY_CERTIFICATE}" --template "${TEMPLATE}" --outfile "${INTERMEDIATE_CERTIFICATE}"
+    NEXT_AUTHORITY_SERIAL=$(echo "${AUTHORITY_SERIAL} + 1" | bc)
+    NEXT_AUTHORITY_SERIAL=$(printf "%03d" "${NEXT_AUTHORITY_SERIAL}")
+    echo "${NEXT_AUTHORITY_SERIAL}" > "${AUTHORITY_SERIAL_FILE}"
+    cat "${INTERMEDIATE_CERTIFICATE}" >> "${CERTIFICATE_CHAIN}"
+    rm "${TEMPLATE}"
     rm "${INTERMEDIATE_REQUEST_FILE}"
 fi
-
-cat "${INTERMEDIATE_CERTIFICATE}" >> "${CERTIFICATE_CHAIN}"
-
-rm "${TEMPLATE}"

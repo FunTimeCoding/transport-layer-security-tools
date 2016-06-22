@@ -1,7 +1,6 @@
 #!/bin/sh -e
 
 CONFIG=""
-VERBOSE=false
 
 function_exists()
 {
@@ -17,14 +16,13 @@ while true; do
             shift 2
             ;;
         --help)
-            echo "Global usage: [--verbose][--help][--config CONFIG]"
-            function_exists usage && usage
+            echo "Global usage: [--help][--config CONFIG]"
+
+            if function_exists usage; then
+                usage
+            fi
 
             exit 0
-            ;;
-        --verbose)
-            VERBOSE=true
-            shift
             ;;
         *)
             break
@@ -36,19 +34,15 @@ OPTIND=1
 
 find_config()
 {
-    if [ "${VERBOSE}" = true ]; then
-        echo "find_config"
-    fi
-
     if [ "${CONFIG}" = "" ]; then
         CONFIG="${HOME}/.transport-layer-security-tools.conf"
     fi
 
     if [ ! "$(command -v realpath 2>&1)" = "" ]; then
-        REALPATH_CMD="realpath"
+        REALPATH=realpath
     else
         if [ ! "$(command -v grealpath 2>&1)" = "" ]; then
-            REALPATH_CMD="grealpath"
+            REALPATH=grealpath
         else
             echo "Required tool (g)realpath not found."
 
@@ -56,7 +50,7 @@ find_config()
         fi
     fi
 
-    CONFIG=$(${REALPATH_CMD} "${CONFIG}")
+    CONFIG=$(${REALPATH} "${CONFIG}")
 
     if [ ! -f "${CONFIG}" ]; then
         echo "Config missing: ${CONFIG}"
@@ -71,10 +65,6 @@ find_config
 
 validate_config()
 {
-    if [ "${VERBOSE}" = true ]; then
-        echo "validate_config"
-    fi
-
     if [ "${DOMAIN_NAME}" = "" ]; then
         echo "DOMAIN_NAME not set."
 
@@ -110,28 +100,67 @@ validate_config
 
 define_library_variables()
 {
-    if [ "${VERBOSE}" = true ]; then
-        echo "define_library_variables"
-    fi
-
     OPERATING_SYSTEM=$(uname)
 
     if [ "${OPERATING_SYSTEM}" = Darwin ]; then
-        export CERTTOOL=gnutls-certtool
+        CERTTOOL=gnutls-certtool
     else
-        export CERTTOOL=certtool
+        CERTTOOL=certtool
     fi
 
-    export TEMPLATE=/tmp/certtool_template
-    export AUTHORITY_PRIVATE_KEY="${DOMAIN_NAME}.authority-private-key.pem"
-    export AUTHORITY_CERTIFICATE="${DOMAIN_NAME}.authority-certificate.crt"
-    export INTERMEDIATE_PRIVATE_KEY="${DOMAIN_NAME}.intermediate-private-key.pem"
-    export INTERMEDIATE_CERTIFICATE="${DOMAIN_NAME}.intermediate-certificate.crt"
-    export CERTIFICATE_CHAIN="${DOMAIN_NAME}.certificate-chain.pem"
+    export CERTTOOL
+    TEMPLATE=/tmp/certtool_template
+    export TEMPLATE
 
     if [ "${PRIVATE_DIRECTORY}" = "" ]; then
-        export PRIVATE_DIRECTORY=private
+        PRIVATE_DIRECTORY=private
     fi
+
+    export PRIVATE_DIRECTORY
+
+    if [ ! -d "${PRIVATE_DIRECTORY}" ]; then
+        echo "Directory not found: ${PRIVATE_DIRECTORY}"
+
+        exit 1
+    fi
+
+    AUTHORITY_PRIVATE_KEY="${PRIVATE_DIRECTORY}/${DOMAIN_NAME}.authority-private-key.pem"
+    export AUTHORITY_PRIVATE_KEY
+
+    AUTHORITY_CERTIFICATE="${PRIVATE_DIRECTORY}/${DOMAIN_NAME}.authority-certificate.crt"
+    export AUTHORITY_CERTIFICATE
+
+    INTERMEDIATE_PRIVATE_KEY="${PRIVATE_DIRECTORY}/${DOMAIN_NAME}.intermediate-private-key.pem"
+    export INTERMEDIATE_PRIVATE_KEY
+
+    INTERMEDIATE_CERTIFICATE="${PRIVATE_DIRECTORY}/${DOMAIN_NAME}.intermediate-certificate.crt"
+    export INTERMEDIATE_CERTIFICATE
+
+    CERTIFICATE_CHAIN="${PRIVATE_DIRECTORY}/${DOMAIN_NAME}.certificate-chain.pem"
+    export CERTIFICATE_CHAIN
+
+    # The serial number is counted for the issuer name.
+    # The issuer is the C=DE,O=... string.
+    AUTHORITY_SERIAL_FILE="${PRIVATE_DIRECTORY}/next-authority-serial.txt"
+    export AUTHORITY_SERIAL_FILE
+
+    if [ ! -f "${AUTHORITY_SERIAL_FILE}" ]; then
+        echo 001 > "${AUTHORITY_SERIAL_FILE}"
+    fi
+
+    AUTHORITY_SERIAL=$(cat "${AUTHORITY_SERIAL_FILE}")
+    export AUTHORITY_SERIAL
+
+    INTERMEDIATE_SERIAL_FILE="${PRIVATE_DIRECTORY}/next-intermediate-serial.txt"
+    export INTERMEDIATE_SERIAL_FILE
+
+
+    if [ ! -f "${INTERMEDIATE_SERIAL_FILE}" ]; then
+        echo 001 > "${INTERMEDIATE_SERIAL_FILE}"
+    fi
+
+    INTERMEDIATE_SERIAL=$(cat "${INTERMEDIATE_SERIAL_FILE}")
+    export INTERMEDIATE_SERIAL
 }
 
 define_library_variables

@@ -2,7 +2,6 @@
 
 DIRECTORY=$(dirname "${0}")
 SCRIPT_DIRECTORY=$(cd "${DIRECTORY}" || exit 1; pwd)
-WITH_ADDRESS=false
 
 usage()
 {

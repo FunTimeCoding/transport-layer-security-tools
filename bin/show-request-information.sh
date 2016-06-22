@@ -19,4 +19,4 @@ if [ "${CERTIFICATE_REQUEST}" = "" ]; then
     exit 1
 fi
 
-${CERTTOOL} --crq-info --infile "${CERTIFICATE_RQUEST}"
+${CERTTOOL} --crq-info --infile "${CERTIFICATE_REQUEST}"
