@@ -1,6 +1,10 @@
 #!/bin/sh -e
 
-CONFIG=""
+if [ "$(command -v realpath || true)" = "" ]; then
+    echo "Command not found: realpath"
+
+    exit 1
+fi
 
 function_exists()
 {
@@ -8,6 +12,8 @@ function_exists()
 
     return $?
 }
+
+CONFIG="${HOME}/.transport-layer-security-tools.conf"
 
 while true; do
     case ${1} in
@@ -32,34 +38,14 @@ done
 
 OPTIND=1
 
-find_config()
-{
-    if [ "${CONFIG}" = "" ]; then
-        CONFIG="${HOME}/.transport-layer-security-tools.conf"
-    fi
+if [ -f "${CONFIG}" ]; then
+    CONFIG=$(realpath "${CONFIG}")
+else
+    echo "Config missing: ${CONFIG}"
 
-    if [ ! "$(command -v realpath 2>&1)" = "" ]; then
-        REALPATH=realpath
-    else
-        if [ ! "$(command -v grealpath 2>&1)" = "" ]; then
-            REALPATH=grealpath
-        else
-            echo "Required tool (g)realpath not found."
+    exit 1;
+fi
 
-            exit 1
-        fi
-    fi
-
-    CONFIG=$(${REALPATH} "${CONFIG}")
-
-    if [ ! -f "${CONFIG}" ]; then
-        echo "Config missing: ${CONFIG}"
-
-        exit 1;
-    fi
-}
-
-find_config
 # shellcheck source=/dev/null
 . "${CONFIG}"
 

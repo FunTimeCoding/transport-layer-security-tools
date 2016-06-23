@@ -68,8 +68,8 @@ Install dependencies on Debian.
 sudo apt-get -qq install realpath gnutls-bin bc
 ```
 
-Copy the example settings file.
+Copy the example config file.
 
 ```sh
-cp example.conf ~/.transport-layer-security-tools.conf
+cp example-config.conf ~/.transport-layer-security-tools.conf
 ```
