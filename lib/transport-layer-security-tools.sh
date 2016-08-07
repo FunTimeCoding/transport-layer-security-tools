@@ -127,7 +127,7 @@ define_library_variables()
 
     # The serial number is counted for the issuer name.
     # The issuer is the C=DE,O=... string.
-    AUTHORITY_SERIAL_FILE="${PRIVATE_DIRECTORY}/next-authority-serial.txt"
+    AUTHORITY_SERIAL_FILE="${PRIVATE_DIRECTORY}/${DOMAIN_NAME}.next-authority-serial.txt"
     export AUTHORITY_SERIAL_FILE
 
     if [ ! -f "${AUTHORITY_SERIAL_FILE}" ]; then
@@ -137,7 +137,7 @@ define_library_variables()
     AUTHORITY_SERIAL=$(cat "${AUTHORITY_SERIAL_FILE}")
     export AUTHORITY_SERIAL
 
-    INTERMEDIATE_SERIAL_FILE="${PRIVATE_DIRECTORY}/next-intermediate-serial.txt"
+    INTERMEDIATE_SERIAL_FILE="${PRIVATE_DIRECTORY}/${DOMAIN_NAME}.next-intermediate-serial.txt"
     export INTERMEDIATE_SERIAL_FILE
 
 

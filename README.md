@@ -48,7 +48,7 @@ bin/show-key-info.sh private/ldap.example.org.node-private-key.pem
 Use alternative config file with different settings.
 
 ```sh
-bin/create-authority-certificates.sh -c ~/.tls-tools-alternative.conf
+bin/create-authority-certificates.sh --config ~/.tls-tools-alternative.conf
 ```
 
 Install certificates on a Debian system running Dnsmasq and Lighttpd.
