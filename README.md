@@ -1,5 +1,20 @@
 # TransportLayerSecurityTools
 
+## Setup
+
+Install dependencies on Debian.
+
+```sh
+sudo apt-get -qq install realpath gnutls-bin bc
+```
+
+Copy the example config file.
+
+```sh
+cp example-config.conf ~/.transport-layer-security-tools.conf
+```
+
+
 ## Usage
 
 This section explains how to use this project.
@@ -60,16 +75,24 @@ bin/install-lighttpd-config.sh example-service.example-hostname
 ```
 
 
-## Setup
+## Development
 
-Install dependencies on Debian.
+This section explains how to use scripts that are intended to ease the development of this project.
+
+Install development tools.
 
 ```sh
-sudo apt-get -qq install realpath gnutls-bin bc
+sudo apt-get install shellcheck
 ```
 
-Copy the example config file.
+Run style check and show all concerns.
 
 ```sh
-cp example-config.conf ~/.transport-layer-security-tools.conf
+./run-style-check.sh
+```
+
+Build the project like Jenkins.
+
+```sh
+./build.sh
 ```
