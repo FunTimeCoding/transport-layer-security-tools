@@ -23,7 +23,7 @@ else
     FIND="find"
 fi
 
-FILTER='^.*/(build|tmp|\.git|\.vagrant|\.idea)/.*$'
+FILTER='^.*/(build|tmp|private|\.git|\.vagrant|\.idea)/.*$'
 
 if [ "${CONTINUOUS_INTEGRATION_MODE}" = true ]; then
     FILES=$(${FIND} . -name '*.sh' -regextype posix-extended ! -regex "${FILTER}" -printf '%P\n')
