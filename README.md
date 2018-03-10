@@ -1,3 +1,4 @@
+
 # TransportLayerSecurityTools
 
 ## Setup
@@ -18,6 +19,12 @@ cp example-config.conf ~/.transport-layer-security-tools.conf
 ## Usage
 
 This section explains how to use this project.
+
+Run the main program.
+
+```sh
+bin/tlst
+```
 
 Create authority and intermediate keys and certificates. Keep them very private.
 
@@ -79,20 +86,14 @@ bin/install-lighttpd-config.sh example-service.example-hostname
 
 This section explains how to use scripts that are intended to ease the development of this project.
 
-Install development tools.
+Run style check.
 
 ```sh
-sudo apt-get install shellcheck
-```
-
-Run style check and show all concerns.
-
-```sh
-./run-style-check.sh
+script/check.sh
 ```
 
 Build the project like Jenkins.
 
 ```sh
-./build.sh
+script/build.sh
 ```
