@@ -11,11 +11,11 @@ fi
 OPERATING_SYSTEM=$(uname)
 
 if [ "${OPERATING_SYSTEM}" = Darwin ]; then
-    CERTTOOL=gnutls-certtool
-    DATE=gdate
+    CERTTOOL='gnutls-certtool'
+    DATE='gdate'
 else
-    CERTTOOL=certtool
-    DATE=date
+    CERTTOOL='certtool'
+    DATE='date'
 fi
 
 VALIDITY=$(${CERTTOOL} --certificate-info --infile "${FILE_NAME}" | grep Validity -A 2 | grep After | xargs)
@@ -25,3 +25,6 @@ NOW=$(${DATE} +"%s")
 EXPIRE_SECONDS=$(echo "${EXPIRE_TIME} - ${NOW}" | bc)
 EXPIRE_DAYS=$(echo "${EXPIRE_SECONDS} / 60 / 60 / 24" | bc)
 echo "${EXPIRE_DAYS}"
+
+echo "The OpenSSL way. TODO: Decide on which to rely on?"
+openssl x509 -enddate -noout -in "${FILE_NAME}"
